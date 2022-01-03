@@ -8,8 +8,11 @@ using namespace std;
 class Student
 {
   public:
-  Student();
-  Student* getStudent();
+    Student(const char* name);
+    Student* getStudent();
+    char* getName();
+    Student* studentp;
+    char* name;
 };
 
 #endif

@@ -9,13 +9,13 @@ using namespace std;
 class Node
 {
   public:
-    Node(Student*);
+    Node(Student* newStudent);
     ~Node();
-    Node* getNextNode();
-    void setNextNode(Node* newNext);
-  private:
-    Student* s;
+    Node* getNext();
+    void setNext(Node* newNext);
+    Student* getStudent();
     Node* next;
+    Student* student;
 };
 
 #endif

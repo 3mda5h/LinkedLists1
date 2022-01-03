@@ -3,19 +3,23 @@
 
 using namespace std;
 
-Node::Node(Student* value)
+Node::Node(Student* newStudent)
 {
-  Student* student = new Student();
-  student = value;
+  Student* student = newStudent;
   Node* next = NULL;
 }
 
-void Node::setNextNode(Node* newNext)
+void Node::setNext(Node* newNext)
 {
   next = newNext;
 }
 
-Node* Node::getNextNode()
+Student* Node::getStudent()
+{
+  return student;
+}
+
+Node* Node::getNext()
 {
   return next;
 }
