@@ -6,6 +6,7 @@ using namespace std;
 Node::Node(Student* newStudent)
 {
   Student* student = newStudent;
+  //cout << student->getName();
   Node* next = NULL;
 }
 
@@ -16,6 +17,8 @@ void Node::setNext(Node* newNext)
 
 Student* Node::getStudent()
 {
+  //cout << student << endl;
+  //cout << student->getName();
   return student;
 }
 
