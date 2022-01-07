@@ -4,8 +4,9 @@
 
 using namespace std;
 
-void addNode(Student* student, Node* &head);
+void addNode(Student* &value, Node* &head);
 void printList(Node* node, Node* head);
+void deleteNode(char* name, Node* &node, Node* &head);
 
 int main() 
 {
@@ -26,6 +27,7 @@ int main()
     {
       cout << "Enter name of student" << endl;
       cin.getline(input, 100);
+
     }
     if(strcmp("print", input) == 0)
     {
@@ -35,14 +37,12 @@ int main()
   }
 } 
 
-void addNode(Student* student, Node* &head)
+void addNode(Student* &value, Node* &head)
 {
-  //cout << student->getName() << endl;
   Node* current = head; //set current to first node in list
   if(current == NULL) //if list is empty
   {
-    head = new Node(student);
-    //cout << head->getStudent()->getName() << endl;
+    head = new Node(value);
   }
   else
   {
@@ -50,8 +50,25 @@ void addNode(Student* student, Node* &head)
     {
       current = current->getNext(); //change current to the next node in the chain
     }
-    Node* newNode = new Node(student); //reaches end of list, makes new node with given value
+    Node* newNode = new Node(value); //reaches end of list, makes new node with given value
     current->setNext(newNode); //connects former last node in list to new node
+  }
+}
+
+void deleteNode(char* name, Node* &node, Node* &head);
+{
+  if(node == head && strcmp(node->getStudent()->getName(), name) == 0)
+  {
+    head = head->getNext();
+    delete node;
+  }
+  else if(strcmp(node->getStudent()->getName(), name) == 0)
+  {
+    node->getNext()
+  }
+  else
+  {
+    deleteNode(name, node->getNext(), head);
   }
 }
 
@@ -63,12 +80,14 @@ void printList(Node* node, Node* head)
   }
   if(node != NULL) //if there's another node
   {
-    Student* student = node->getStudent();
-    //cout << student << endl;
-   // cout << "called" << endl;
-    char* c = node->getStudent()->getName();
-   // cout << c << endl;
-   // cout << node->getStudent()->getName() << ", ";
+    if(node->getNext() == NULL) //if last node
+    {
+      cout << node->getStudent()->getName() << endl;
+    }
+    else
+    {
+      cout << node->getStudent()->getName() << ", ";
+    }
     printList(node->getNext(), head); 
   }
 }
