@@ -9,13 +9,13 @@ using namespace std;
 class Node
 {
   public:
-    Node(Student* newStudent);
-    ~Node();
-    Node* getNext();
-    void setNext(Node* newNext);
-    Student* getStudent();
-    Node* next;
-    Student* student;
+    Node(Student* newStudent); //constructor
+    ~Node(); //deconstructor
+    Node* getNext(); //returns next node in list
+    void setNext(Node* newNext); //set next node in list
+    Student* getStudent(); //returns pointer to this node's student 
+    Node* next; 
+    Student* student; 
 };
 
 #endif

@@ -10,6 +10,11 @@ Student::Student(char* newName)
   strcpy(name, newName);
 }
 
+Student::~Student()
+{
+  delete name;
+}
+
 char* Student::getName()
 {
   return name;

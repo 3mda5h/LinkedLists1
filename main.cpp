@@ -1,3 +1,5 @@
+//Linked List - a linked list of nodes containing student pointers, use can add 
+//Emily MacPherson, 1/10/22
 #include <iostream>
 #include "Node.h"
 #include <cstring>
@@ -6,7 +8,7 @@ using namespace std;
 
 void addNode(Student* &value, Node* &head);
 void printList(Node* node, Node* head);
-void deleteNode(char* name, Node* &node, Node* &head);
+void deleteNode(char* name, Node* &head, Node* previous, Node* node);
 
 int main() 
 {
@@ -16,6 +18,10 @@ int main()
   {
     cout << "Type ADD, DELETE, PRINT, or QUIT" << endl;
     cin.getline(input, 100);
+    for(int i = 0; i < strlen(input); i++)
+    {
+      input[i] = tolower(input[i]);
+    }
     if(strcmp("add", input) == 0)
     {
       cout << "Enter name of student" << endl;
@@ -27,7 +33,7 @@ int main()
     {
       cout << "Enter name of student" << endl;
       cin.getline(input, 100);
-
+      deleteNode(input, head, head, head);
     }
     if(strcmp("print", input) == 0)
     {
@@ -37,6 +43,7 @@ int main()
   }
 } 
 
+//adds node to the end of the list
 void addNode(Student* &value, Node* &head)
 {
   Node* current = head; //set current to first node in list
@@ -55,30 +62,34 @@ void addNode(Student* &value, Node* &head)
   }
 }
 
-void deleteNode(char* name, Node* &node, Node* &head);
+//deletes node with given name from list
+void deleteNode(char* name, Node* &head, Node* previous, Node* node)
 {
-  if(node == head && strcmp(node->getStudent()->getName(), name) == 0)
+  if(node == head && strcmp(node->getStudent()->getName(), name) == 0) //if first node in list and names match
   {
-    head = head->getNext();
-    delete node;
+    head = head->getNext(); //2nd node is now the head node
+    delete node; //delete first node
   }
-  else if(strcmp(node->getStudent()->getName(), name) == 0)
+  else if(strcmp(node->getStudent()->getName(), name) == 0) //if not the first node and names match
   {
-    node->getNext()
+    previous->setNext(node->getNext()); //previous node connected to next node
+    delete node;
   }
   else
   {
-    deleteNode(name, node->getNext(), head);
+    previous = node;    
+    deleteNode(name, head, previous, node->getNext());
   }
 }
 
+//prints out every element in the list
 void printList(Node* node, Node* head)
 {
   if(node == head) //first call of function
   {
     cout << "List: ";
   }
-  if(node != NULL) //if there's another node
+  if(node != NULL) 
   {
     if(node->getNext() == NULL) //if last node
     {

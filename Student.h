@@ -8,8 +8,9 @@ using namespace std;
 class Student
 {
   public:
-    Student(char* name);
-    char* getName();
+    Student(char* name); //constructor
+    ~Student(); //deconstructor
+    char* getName(); //returns name of student
     char* name;
 };
 
