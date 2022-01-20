@@ -8,7 +8,8 @@ using namespace std;
 
 void addNode(Student* &value, Node* &head);
 void printList(Node* node, Node* head);
-void deleteNode(char* name, Node* &head, Node* previous, Node* node);
+void deleteNode(char* id, Node* &head, Node* previous, Node* node);
+float average(Node* node, int &numofnodes, int &sum);
 
 int main() 
 {
@@ -24,9 +25,16 @@ int main()
     }
     if(strcmp("add", input) == 0)
     {
-      cout << "Enter name of student" << endl;
-      cin.getline(input, 100);
-      Student* newStudent = new Student(input);
+      cout << "Enter student name" << endl;
+      char name[100];
+      cin.getline(name, 100);
+      cout << "Enter student id" << endl;
+      char id[100];
+      cin.getline(id, 100);
+      cout << "Enter student gpa" << endl;
+      char gpa[100];
+      cin.getline(gpa, 100);
+      Student* newStudent = new Student(name, id, gpa);
       addNode(newStudent, head);
     }
     if(strcmp("delete", input) == 0)
@@ -63,14 +71,14 @@ void addNode(Student* &value, Node* &head)
 }
 
 //deletes node with given name from list
-void deleteNode(char* name, Node* &head, Node* previous, Node* node)
+void deleteNode(char* id, Node* &head, Node* previous, Node* node)
 {
-  if(node == head && strcmp(node->getStudent()->getName(), name) == 0) //if first node in list and names match
+  if(node == head && strcmp(node->getStudent()->getId(), id) == 0) //if first node in list and names match
   {
     head = head->getNext(); //2nd node is now the head node
     delete node; //delete first node
   }
-  else if(strcmp(node->getStudent()->getName(), name) == 0) //if not the first node and names match
+  else if(strcmp(node->getStudent()->getId(), id) == 0) //if not the first node and ids match
   {
     previous->setNext(node->getNext()); //previous node connected to next node
     delete node;
@@ -78,7 +86,7 @@ void deleteNode(char* name, Node* &head, Node* previous, Node* node)
   else
   {
     previous = node;    
-    deleteNode(name, head, previous, node->getNext());
+    deleteNode(id, head, previous, node->getNext());
   }
 }
 
@@ -87,18 +95,26 @@ void printList(Node* node, Node* head)
 {
   if(node == head) //first call of function
   {
-    cout << "List: ";
+    cout << "List: " << endl;
   }
   if(node != NULL) 
   {
-    if(node->getNext() == NULL) //if last node
-    {
-      cout << node->getStudent()->getName() << endl;
-    }
-    else
-    {
-      cout << node->getStudent()->getName() << ", ";
-    }
+    cout << node->getStudent()->getName() << ", " << node->getStudent()->getId() << ", " << node->getStudent()->getGpa() << endl;
     printList(node->getNext(), head); 
+  }
+}
+
+float average(Node* node, int &numofnodes, int &sum)
+{
+  numofnodes++;
+  sum += node->getStudent()->getGpa() - "0";
+  if(node->getNext() == NULL) //last node
+  {
+    return sum / numofnodes;
+  }
+  else
+  {
+    average(node->getNext(), numofnodes, sum);
+    return 0;
   }
 }
