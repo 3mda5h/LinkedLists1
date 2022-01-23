@@ -6,10 +6,10 @@
 
 using namespace std;
 
-void addNode(Student* &value, Node* &head);
+void addNode(Student* &value, Node* &head, Node* previous);
 void printList(Node* node, Node* head);
-void deleteNode(char* id, Node* &head, Node* previous, Node* node);
-float average(Node* node, int &numofnodes, int &sum);
+void deleteNode(char* id, Node* &head, Node* previous, Node* current);
+void average(Node* node, int numofnodes, double sum);
 
 int main() 
 {
@@ -17,7 +17,7 @@ int main()
   char input[100];
   while(strcmp(input, "quit") != 0)
   {
-    cout << "Type ADD, DELETE, PRINT, or QUIT" << endl;
+    cout << "Type ADD, DELETE, PRINT, AVERAGE, or QUIT" << endl;
     cin.getline(input, 100);
     for(int i = 0; i < strlen(input); i++)
     {
@@ -35,13 +35,17 @@ int main()
       char gpa[100];
       cin.getline(gpa, 100);
       Student* newStudent = new Student(name, id, gpa);
-      addNode(newStudent, head);
+      addNode(newStudent, head, NULL);
     }
     if(strcmp("delete", input) == 0)
     {
       cout << "Enter name of student" << endl;
       cin.getline(input, 100);
       deleteNode(input, head, head, head);
+    }
+    if(strcmp("average", input) == 0)
+    {
+      average(head, 0, 0);
     }
     if(strcmp("print", input) == 0)
     {
@@ -52,41 +56,41 @@ int main()
 } 
 
 //adds node to the end of the list
-void addNode(Student* &value, Node* &head)
+void addNode(Student* &value, Node* &head, Node* previous, Node* current)
 {
-  Node* current = head; //set current to first node in list
-  if(current == NULL) //if list is empty
+  if(head == NULL) //if list is empty
   {
     head = new Node(value);
   }
   else
   {
-    while(current->getNext() != NULL)//while current node is not the last node
+    if(current->getStudent()->getGpa() < previous->getStudent()->getGpa())
     {
-      current = current->getNext(); //change current to the next node in the chain
+      addNode(value, head, current->getNext(),current);
     }
-    Node* newNode = new Node(value); //reaches end of list, makes new node with given value
-    current->setNext(newNode); //connects former last node in list to new node
+    Node* newNode = new Node(value);
+    previous->setNext(newNode);
+    newNode->setNext(current->getNext());
   }
 }
 
 //deletes node with given name from list
-void deleteNode(char* id, Node* &head, Node* previous, Node* node)
+void deleteNode(char* id, Node* &head, Node* previous, Node* current)
 {
-  if(node == head && strcmp(node->getStudent()->getId(), id) == 0) //if first node in list and names match
+  if(current == head && strcmp(current->getStudent()->getId(), id) == 0) //if first node in list and names match
   {
     head = head->getNext(); //2nd node is now the head node
-    delete node; //delete first node
+    delete current; //delete first node
   }
-  else if(strcmp(node->getStudent()->getId(), id) == 0) //if not the first node and ids match
+  else if(strcmp(current->getStudent()->getId(), id) == 0) //if not the first node and ids match
   {
-    previous->setNext(node->getNext()); //previous node connected to next node
-    delete node;
+    previous->setNext(current->getNext()); //previous node connected to next node
+    delete current;
   }
   else
   {
-    previous = node;    
-    deleteNode(id, head, previous, node->getNext());
+    previous = current;    
+    deleteNode(id, head, previous, current->getNext());
   }
 }
 
@@ -104,17 +108,16 @@ void printList(Node* node, Node* head)
   }
 }
 
-float average(Node* node, int &numofnodes, int &sum)
+void average(Node* node, int numofnodes, double sum)
 {
   numofnodes++;
-  sum += node->getStudent()->getGpa() - "0";
+  sum += atof(node->getStudent()->getGpa());
   if(node->getNext() == NULL) //last node
   {
-    return sum / numofnodes;
+    cout << "average gpa: " << sum / numofnodes << endl;
   }
   else
   {
     average(node->getNext(), numofnodes, sum);
-    return 0;
   }
 }

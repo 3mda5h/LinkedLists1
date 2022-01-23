@@ -6,12 +6,14 @@ using namespace std;
 
 Student::Student(char* newName, char* newId, char* newGpa)
 {
-  name = new char[100]; 
+  name = new char[100];
+  gpa = new char[100]; 
   id = new char[100];
-  gpa = new char[100];
   strcpy(name, newName);
-  strcpy(id, newId);
   strcpy(gpa, newGpa);
+  strcpy(id, newId);
+
+
 }
 
 Student::~Student()
