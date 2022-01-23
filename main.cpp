@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void addNode(Student* &value, Node* &head, Node* previous);
+void addNode(Student* &value, Node* &head, Node* previous, Node* current);
 void printList(Node* node, Node* head);
 void deleteNode(char* id, Node* &head, Node* previous, Node* current);
 void average(Node* node, int numofnodes, double sum);
@@ -35,7 +35,7 @@ int main()
       char gpa[100];
       cin.getline(gpa, 100);
       Student* newStudent = new Student(name, id, gpa);
-      addNode(newStudent, head, NULL);
+      addNode(newStudent, head, head, head);
     }
     if(strcmp("delete", input) == 0)
     {
@@ -62,15 +62,28 @@ void addNode(Student* &value, Node* &head, Node* previous, Node* current)
   {
     head = new Node(value);
   }
+  else if(current == head && atoi(value->getId()) < atoi(head->getStudent()->getId())) //if new gpa is lower than current head node gpa
+  {
+    //replace head node with new node
+    Node* newNode = new Node(value);
+    newNode->setNext(head);
+    head = newNode;
+  }
   else
   {
-    if(current->getStudent()->getGpa() < previous->getStudent()->getGpa())
+    if(atoi(current->getStudent()->getId()) <= atoi(previous->getStudent()->getId()) && current->getNext() != NULL)
     {
-      addNode(value, head, current->getNext(),current);
+      addNode(value, head, current, current->getNext());
     }
-    Node* newNode = new Node(value);
-    previous->setNext(newNode);
-    newNode->setNext(current->getNext());
+    else
+    {
+      Node* newNode = new Node(value);
+      previous->setNext(newNode);
+      if(current != head)
+      {
+        newNode->setNext(current);
+      }
+    }
   }
 }
 
