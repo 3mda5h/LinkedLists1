@@ -4,16 +4,13 @@
 
 using namespace std;
 
-Student::Student(char* newName, char* newId, char* newGpa)
+Student::Student(char* newName, char* newId, double newGpa)
 {
   name = new char[100];
-  gpa = new char[100]; 
   id = new char[100];
   strcpy(name, newName);
-  strcpy(gpa, newGpa);
   strcpy(id, newId);
-
-
+  gpa = newGpa;
 }
 
 Student::~Student()
@@ -31,7 +28,7 @@ char* Student::getId()
   return id;
 }
 
-char* Student::getGpa()
+double Student::getGpa()
 {
   return gpa;
 }

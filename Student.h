@@ -8,14 +8,14 @@ using namespace std;
 class Student
 {
   public:
-    Student(char* name, char* id, char* gpa); //constructor
+    Student(char* name, char* id, double gpa); //constructor
     ~Student(); //deconstructor
     char* getName(); //returns name of student
     char* getId();
-    char* getGpa();
+    double getGpa();
     char* name;
     char* id;
-    char* gpa;
+    double gpa;
 };
 
 #endif

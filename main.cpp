@@ -1,8 +1,9 @@
-//Linked List - a linked list of nodes containing student pointers, use can add 
+//Linked List - a linked list of nodes containing student pointers. User can add, delete, and print out whole list or gpa averages
 //Emily MacPherson, 1/10/22
 #include <iostream>
 #include "Node.h"
 #include <cstring>
+#include <iomanip>
 
 using namespace std;
 
@@ -13,6 +14,7 @@ void average(Node* node, int numofnodes, double sum);
 
 int main() 
 {
+  cout << fixed << setprecision(2); //so gpa float will round to the 100ths or print 2 trailing 0s
   Node* head = NULL; //beginning of list
   char input[100];
   while(strcmp(input, "quit") != 0)
@@ -28,20 +30,28 @@ int main()
       cout << "Enter student name" << endl;
       char name[100];
       cin.getline(name, 100);
-      cout << "Enter student id" << endl;
+      cout << "Enter student ID" << endl;
       char id[100];
       cin.getline(id, 100);
-      cout << "Enter student gpa" << endl;
+      cout << "Enter student GPA" << endl;
       char gpa[100];
       cin.getline(gpa, 100);
-      Student* newStudent = new Student(name, id, gpa);
-      addNode(newStudent, head, head, head);
+      double dub = atof(gpa);
+      Student* newStudent = new Student(name, id, dub);
+      addNode(newStudent, head, NULL, head);
     }
     if(strcmp("delete", input) == 0)
     {
-      cout << "Enter name of student" << endl;
-      cin.getline(input, 100);
-      deleteNode(input, head, head, head);
+      if(head == NULL)
+      {
+        cout << "The list is empty" << endl;
+      }
+      else
+      {
+        cout << "Enter student ID" << endl;
+        cin.getline(input, 100);
+        deleteNode(input, head, head, head);
+      }
     }
     if(strcmp("average", input) == 0)
     {
@@ -55,39 +65,60 @@ int main()
   }
 } 
 
-//adds node to the end of the list
+//adds new node into list in order of lowest id to highest
 void addNode(Student* &value, Node* &head, Node* previous, Node* current)
 {
   if(head == NULL) //if list is empty
   {
     head = new Node(value);
   }
-  else if(current == head && atoi(value->getId()) < atoi(head->getStudent()->getId())) //if new gpa is lower than current head node gpa
+  else if(current == head) 
   {
-    //replace head node with new node
-    Node* newNode = new Node(value);
-    newNode->setNext(head);
-    head = newNode;
+    if(atoi(value->getId()) < atoi(head->getStudent()->getId()))//if new id is lower than head id
+    {
+      //replace head node with new node
+      Node* newNode = new Node(value);
+      newNode->setNext(head);
+      head = newNode;
+    }
+    else if(current->getNext() == NULL) //if new id is greater & head node is last node 
+    {
+      //add new node after head
+      Node* newNode = new Node(value);
+      current->setNext(newNode);
+    }
+    else //if new id is greater & head node not last node
+    {
+      addNode(value, head, current, current->getNext()); //next node
+    }
   }
   else
   {
-    if(atoi(current->getStudent()->getId()) <= atoi(previous->getStudent()->getId()) && current->getNext() != NULL)
+    if((atoi(value->getId()) >= atoi(current->getStudent()->getId()) )) //if new id is greater than or equal to current id
     {
-      addNode(value, head, current, current->getNext());
-    }
-    else
-    {
-      Node* newNode = new Node(value);
-      previous->setNext(newNode);
-      if(current != head)
+      if(current->getNext() == NULL) //if current node is last node
       {
-        newNode->setNext(current);
+        //add new node to end of list
+        Node* newNode = new Node(value);
+        current->setNext(newNode);
       }
+      else
+      {
+        addNode(value, head, current, current->getNext()); //next node
+      }
+    }
+    else //new id is less than current node 
+    {
+      //insert node in between previous node and current node
+      Node* newNode = new Node(value); 
+      newNode->setNext(current);
+      previous->setNext(newNode);
+
     }
   }
 }
 
-//deletes node with given name from list
+//deletes node with given id from list
 void deleteNode(char* id, Node* &head, Node* previous, Node* current)
 {
   if(current == head && strcmp(current->getStudent()->getId(), id) == 0) //if first node in list and names match
@@ -121,13 +152,14 @@ void printList(Node* node, Node* head)
   }
 }
 
+//prints out the average gpa of all students
 void average(Node* node, int numofnodes, double sum)
 {
-  numofnodes++;
-  sum += atof(node->getStudent()->getGpa());
+  numofnodes++; //keeps track of total amount of nodes in list
+  sum += node->getStudent()->getGpa();
   if(node->getNext() == NULL) //last node
   {
-    cout << "average gpa: " << sum / numofnodes << endl;
+    cout << "Average GPA: " << sum / numofnodes << endl;
   }
   else
   {
