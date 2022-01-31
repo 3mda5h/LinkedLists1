@@ -95,6 +95,7 @@ void addNode(Student* &value, Node* &head, Node* current)
     current->setNext(newNode); //add node in between current node and next node
     return;
   }
+//probably don't need? don't feel like messing with it tho
   if(current->getNext() == NULL)
   {
     Node* newNode = new Node(value);
